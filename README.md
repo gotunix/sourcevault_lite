@@ -1,2 +1,1 @@
-# sourcevault_lite
-SourceVault Lite
+docs/README.md

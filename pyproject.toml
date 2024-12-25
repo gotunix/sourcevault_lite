@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sourcevault_lite"
+dynamic = ["version"]
+authors = [
+  { name="Justin Ovens", email="jovens@gotunix.net" },
+]
+description = "A Python clone of giteolite"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["performance", "profiling", "testing", "development"]
+classifiers = [
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.scripts]
+sourcevault_cli = "sourcevault_lite:cli.main"
+sourcevault_shell = "sourcevault_lite:shell.main"
+
+[project.urls]
+Homepage = "https://sourcevault.dev"
+Issues = "https://sourcevault.dev"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "sourcevault_lite.__version__"}
