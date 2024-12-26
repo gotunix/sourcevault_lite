@@ -35,3 +35,46 @@
 # <http://www.gnu.org/licenses/>.                                     #
 # ------------------------------------------------------------------- #
 from __future__ import annotations
+
+try:
+    import subprocess
+except ImportError as error:
+    print(f"Failure to import module(s): {error}")
+    exit(1)
+
+
+class Command:
+    def __init__(self, command, **kwargs):
+        self.command = command
+        self.kwargs = kwargs
+
+    def run(self, input_data=None, timeout=None):
+        process = subprocess.Popen(
+            self.command,
+            stdin=subprocess.PIPE if input_data else None,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            **self.kwargs,
+        )
+
+        try:
+            stdout, stderr = process.communicate(
+                input=input_data, timeout=timeout
+            )
+        except subprocess.TimeoutExpired:
+            process.kill()
+            stdout, stderr = process.communicate()
+            raise
+
+        return CompletedProcess(process.returncode, stdout, stderr)
+
+
+class CompletedProcess:
+    def __init__(self, returncode, stdout, stderr):
+        self.returncode = returncode
+        self.stdout = stdout
+        self.stderr = stderr
+
+    def check_returncode(self):
+        if self.returncode != 0:
+            raise subprocess.CalledProcessError(self.returncode, self.command)
